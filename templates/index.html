@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero rounded-3 mb-5">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="hero-title fade-in">Questionário M-CHAT-R/F</h1>
+            <p class="hero-subtitle fade-in delay-1">Modified Checklist for Autism in Toddlers, Revised with Follow-Up</p>
+            <a href="#teste" class="btn btn-light btn-lg fade-in delay-2">
+                <i class="bi bi-play-circle me-2"></i>Iniciar Teste
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card fade-in delay-3">
+            <div class="card-header text-center">
+                <h2 class="mb-0"><i class="bi bi-clipboard-check me-2"></i>Questionário M-CHAT-R/F</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h4><i class="bi bi-info-circle me-2"></i>Instruções</h4>
+                    <p class="mb-0">Responda às perguntas abaixo com base no comportamento habitual da criança. Tente responder todas as perguntas. Se o comportamento raramente ocorreu (você viu uma ou duas vezes), responda como se a criança não o tivesse.</p>
+                </div>
+
+                <form id="testeForm" method="POST" action="{{ url_for('avaliar') }}">
+                    <!-- Progress Bar -->
+                    <div class="d-none d-md-block mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Progresso do questionário</span>
+                            <span id="progressText">0%</span>
+                        </div>
+                        <div class="progress">
+                            <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+
+                    {% for i in range(perguntas|length) %}
+                    <div class="card question-card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ perguntas[i] }}</h5>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-check custom-radio p-3 rounded bg-light">
+                                        <input class="form-check-input" type="radio" name="pergunta_{{ i }}" id="sim_{{ i }}" value="SIM" required>
+                                        <label class="form-check-label fs-5" for="sim_{{ i }}">
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>Sim
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check custom-radio p-3 rounded bg-light">
+                                        <input class="form-check-input" type="radio" name="pergunta_{{ i }}" id="nao_{{ i }}" value="NÃO">
+                                        <label class="form-check-label fs-5" for="nao_{{ i }}">
+                                            <i class="bi bi-x-circle-fill text-danger me-2"></i>Não
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-graph-up me-2"></i>Avaliar Resultado
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

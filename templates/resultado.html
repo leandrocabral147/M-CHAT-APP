@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Resultado do M-CHAT-R/F</h2>
+                <p>Avaliação realizada em: {{ data }}</p>
+            </div>
+            <div class="card-body">
+                <div class="alert 
+                    {% if classificacao == 'Baixo risco' %}alert-success
+                    {% elif classificacao == 'Risco moderado' %}alert-warning
+                    {% else %}alert-danger
+                    {% endif %}">
+                    <h4 class="alert-heading">Pontuação: {{ pontuacao }} / 20</h4>
+                    <p class="mb-0"><strong>Classificação:</strong> {{ classificacao }}</p>
+                </div>
+                
+                <h4>Recomendação:</h4>
+                <p>{{ recomendacao }}</p>
+                
+                <h4 class="mt-4">Respostas:</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Pergunta</th>
+                                <th>Resposta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(perguntas|length) %}
+                            <tr>
+                                <td>{{ perguntas[i] }}</td>
+                                <td>{{ respostas[i] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <hr>
+                
+                <h4 class="mt-4">Gerar Relatório</h4>
+                <p>Preencha os campos abaixo para gerar um relatório em PDF ou recebê-lo por e-mail.</p>
+                
+                <form method="POST" action="{{ url_for('gerar_pdf') }}">
+                    <input type="hidden" name="pontuacao" value="{{ pontuacao }}">
+                    <input type="hidden" name="classificacao" value="{{ classificacao }}">
+                    <input type="hidden" name="recomendacao" value="{{ recomendacao }}">
+                    <input type="hidden" name="data" value="{{ data }}">
+                    
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome da Criança</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail (opcional)</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="enviar_email" name="enviar_email" value="sim">
+                        <label class="form-check-label" for="enviar_email">Enviar relatório por e-mail</label>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="submit" class="btn btn-primary">Baixar PDF</button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar ao Início</a>
+                    </div>
+                </form>
+                
+                <div class="alert alert-warning mt-4">
+                    <strong>Lembrete:</strong> Este resultado é apenas uma triagem e não constitui um diagnóstico. Consulte um profissional qualificado para uma avaliação completa.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
